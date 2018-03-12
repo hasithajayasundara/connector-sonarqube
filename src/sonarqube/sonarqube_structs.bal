@@ -34,6 +34,7 @@ public struct Issue {
     string message;
     string author;
     string creationDate;
+    string assignee;
     string |type|;
     Position position;
     string[] tags;
@@ -50,6 +51,13 @@ public struct Comment {
     string text;
     string key;
     string commenter;
+    string createdDate;
+}
+
+public struct Operation {
+    string name;
+    string status;
+    string details;
     string createdDate;
 }
 

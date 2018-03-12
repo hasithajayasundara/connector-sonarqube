@@ -22,7 +22,6 @@ import ballerina.io;
 import src.sonarqube;
 
 function main (string[] args) {
-
     endpoint<sonarqube:SonarqubeConnector> sonarqubueConnector {
         create sonarqube:SonarqubeConnector();
     }
@@ -32,7 +31,7 @@ function main (string[] args) {
     //get project details
     var project, err = sonarqubueConnector.getProject(projectName);
     if (err == null) {
-        io:println(project);
+
         //line coverage
         var lineCoverage, err = project.lineCoverage();
         if (err == null) {
@@ -56,7 +55,6 @@ function main (string[] args) {
         } else {
             io:println(err);
         }
-
         //get number of vulnerabilities
         var vulnerabilities, err = project.vulnerabilitiesCount();
         if (err == null) {

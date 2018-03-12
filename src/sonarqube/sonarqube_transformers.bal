@@ -42,6 +42,7 @@ transformer <json issueDetails, Issue issue> getIssue() {
     issue.message = (issueDetails[MESSAGE] != null) ? issueDetails[MESSAGE].toString() : null;
     issue.author = (issueDetails[AUTHOR] != null) ? issueDetails[AUTHOR].toString() : null;
     issue.creationDate = (issueDetails[CREATION_DATE] != null) ? issueDetails[CREATION_DATE].toString() : null;
+    issue.assignee = (issueDetails[ASSIGNEE] != null) ? issueDetails[ASSIGNEE].toString() : null;
     json positionInfo = issueDetails[ISSUE_RANGE];
     issue.position = {};
     issue.position.startLine = (positionInfo != null) ? ((positionInfo[START_LINE] != null) ? positionInfo[START_LINE].toString() : null) : null;
@@ -52,7 +53,6 @@ transformer <json issueDetails, Issue issue> getIssue() {
                                            }) : [];
     json transitions = issueDetails[TRANSITIONS];
     issue.workflowTransitions = (transitions != null) ? transitions.map(function (json transition) (string) {
-
                                                                             return transition.toString();
                                                                         }) : [];
     json comments = issueDetails[COMMENTS];
