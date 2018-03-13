@@ -21,7 +21,7 @@ package samples.sonarqube;
 import ballerina.io;
 import src.sonarqube;
 
-function main (string[] args) {
+function main (string[] a) {
     endpoint<sonarqube:SonarqubeConnector> sonarqubueConnector {
         create sonarqube:SonarqubeConnector();
     }
@@ -30,103 +30,216 @@ function main (string[] args) {
 
     //get project details
     var project, err = sonarqubueConnector.getProject(projectName);
-    if (err == null) {
+    if (err != null) {
+        io:println(err.message);
+    } else {
 
-        //line coverage
         var lineCoverage, err = project.lineCoverage();
         if (err == null) {
-            io:println(lineCoverage);
+            io:println("Line coverage - " + lineCoverage);
         } else {
-            io:println("Line coverage - " + err.message);
+            io:println(err.message);
         }
 
-        //lines
-        var lines, err = project.linesOfCode();
-        if (err == null) {
-            io:println(lines);
-        } else {
-            io:println(err);
-        }
-
-        //get branch coverage
         var branchCoverage, err = project.branchCoverage();
         if (err == null) {
-            io:println(branchCoverage);
+            io:println("Branch coverage -" + branchCoverage);
         } else {
             io:println(err);
         }
-        //get number of vulnerabilities
+
+        var complexity, err = project.complexity();
+        if (err == null) {
+            io:println("Complexity - " + complexity);
+        } else {
+            io:println(err.message);
+        }
+
+        var duplicatedBlocksCount, err = project.duplicatedCodeBlocksCount();
+        if (err == null) {
+            io:println("Duplicated blocks count - " + duplicatedBlocksCount);
+        } else {
+            io:println(err.message);
+        }
+
+        var duplicatedLinesCount, err = project.duplicatedLinesCount();
+        if (err == null) {
+            io:println("Duplicated lines count - " + duplicatedLinesCount);
+        } else {
+            io:println(err.message);
+        }
+
+        var duplicatedFilesCount, err = project.duplicatedFilesCount();
+        if (err == null) {
+            io:println("Duplicated files count - " + duplicatedFilesCount);
+        } else {
+            io:println(err.message);
+        }
+
+        var blockerIssueCount, err = project.blockerIssuesCount();
+        if (err == null) {
+            io:println("Blocker issues count - " + blockerIssueCount);
+        } else {
+            io:println(err.message);
+        }
+
+        var criticalIssueCount, err = project.criticalIssuesCount();
+        if (err == null) {
+            io:println("Critical issues count - " + criticalIssueCount);
+        } else {
+            io:println(err.message);
+        }
+
+        var majorIssueCount, err = project.majorIssuesCount();
+        if (err == null) {
+            io:println("Major issues count - " + majorIssueCount);
+        } else {
+            io:println(err.message);
+        }
+
+        var minorIssueCount, err = project.majorIssuesCount();
+        if (err == null) {
+            io:println("Minor issues count - " + minorIssueCount);
+        } else {
+            io:println(err.message);
+        }
+
+        var openIssuesCout, err = project.openIssuesCount();
+        if (err == null) {
+            io:println("Open issues count - " + openIssuesCout);
+        } else {
+            io:println(err.message);
+        }
+
+        var reopenedIssuesCount, err = project.reopenedIssuesCount();
+        if (err == null) {
+            io:println("Reopened issues count - " + reopenedIssuesCount);
+        } else {
+            io:println(err.message);
+        }
+
+        var confirmedIssueCount, err = project.confirmedIssuesCount();
+        if (err == null) {
+            io:println("Confirmed issues count - " + confirmedIssueCount);
+        } else {
+            io:println(err.message);
+        }
+
+        var lines, err = project.linesOfCode();
+        if (err == null) {
+            io:println("Lines of code - " + lines);
+        } else {
+            io:println(err.message);
+        }
+
+        var codeSmellsCount, err = project.codeSmellsCount();
+        if (err == null) {
+            io:println("Code smells count - " + codeSmellsCount);
+        } else {
+            io:println(err.message);
+        }
+
+        var sqaleRating, err = project.SQALERating();
+        if (err == null) {
+            io:println("SQALE rating - " + sqaleRating);
+        } else {
+            io:println(err.message);
+        }
+
+        var technicalDebt, err = project.technicalDebt();
+        if (err == null) {
+            io:println("Technical debt - " + technicalDebt);
+        } else {
+            io:println(err.message);
+        }
+
+        var technicalDebtRatio, err = project.technicalDebtRatio();
+        if (err == null) {
+            io:println("Technical debt ratio - " + technicalDebtRatio);
+        } else {
+            io:println(err.message);
+        }
+
         var vulnerabilities, err = project.vulnerabilitiesCount();
         if (err == null) {
-            io:println(vulnerabilities);
+            io:println("Vulnerabilities count - " + vulnerabilities);
         } else {
-            io:println(err);
+            io:println(err.message);
         }
 
-        //get security rating
         var securityRating, err = project.securityRating();
         if (err == null) {
-            io:println(securityRating);
+            io:println("Security Rating - " + securityRating);
         } else {
-            io:println(err);
+            io:println(err.message);
         }
 
-        //get number of bugs
-        var numberofBugs, err = project.bugsCount();
+        var bugsCount, err = project.bugsCount();
         if (err == null) {
-            io:println(numberofBugs);
+            io:println("Bugs Count - " + bugsCount);
         } else {
-            io:println(err);
+            io:println(err.message);
         }
 
-        //get reliability rating
         var reliabilityRating, err = project.reliabilityRating();
         if (err == null) {
-            io:println(reliabilityRating);
+            io:println("Reliability rating - " + reliabilityRating);
         } else {
-            io:println(err);
+            io:println(err.message);
         }
 
-        //get project issues
         var projectIssues, err = project.issues();
         if (err == null) {
+            io:print("Issues - ");
             io:println(projectIssues);
         } else {
-            io:println(err);
+            io:println(err.message);
         }
 
-        //add comment on issue
-        var commentResponse, err = projectIssues[0].addComment("Commented twice");
+        //Error
+        //Issue issue = projectIssues[0];
+        //Comment comment = issue.comments[0];
+
+        var comment, err = projectIssues[0].addComment("This is a critical issue");
         if (err == null) {
-            io:println(commentResponse);
+            io:println("Adding comment - " + comment.details);
         } else {
-            io:println(err);
+            io:println(err.message);
         }
 
-        //assign a user to issue
-        var assignResponse, err = projectIssues[0].assign("admin");
+        var assign, err = projectIssues[0].assign("admin");
         if (err == null) {
-            io:println(assignResponse);
+            io:println("Assign comment - " + assign.details);
         } else {
-            io:println("Assign issue - "+err.message);
+            io:println(err.message);
         }
 
-        //set issue severity
-        var severity, err = projectIssues[0].setSeverity("CRITICAL");
+        var setSeverity, err = projectIssues[0].setSeverity("CRITICAL");
         if (err == null) {
-            io:println(severity);
+            io:println("Set Severity - " + setSeverity.details);
         } else {
-            io:println(err);
+            io:println(err.message);
         }
 
-        //set issue type
-        var issueType, err = projectIssues[0].setType("CODE_SMELL");
+        var setissueType, err = projectIssues[0].setType("CODE_SMELL");
         if (err == null) {
-            io:println(issueType);
+            io:println("Set issue type - " + setissueType.details);
         } else {
-            io:println(err);
+            io:println(err.message);
         }
-    } else {
-        io:println("Project error - " + err.message);
+
+        var editComment, err = projectIssues[0].comments[0].edit("This is a blocker issue");
+        if (err == null) {
+            io:println("Edit comment - " + editComment.details);
+        } else {
+            io:println(err.message);
+        }
+
+        var deleteComment, err = projectIssues[0].comments[0].delete();
+        if (err == null) {
+            io:println("Delete comment - " + deleteComment.details);
+        } else {
+            io:println(err.message);
+        }
     }
 }

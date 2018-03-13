@@ -1,48 +1,62 @@
-# SonarQube Connector
+# Ballerina SonarQube Connector
 
-The SonarQube connector allows you to access the SonarQubue REST API through ballerina and get a list of past line coverage measures.
+*SonarQube is an open source platform developed by SonarSource for continuous inspection of code quality to perform automatic reviews with static analysis of code to detect bugs, code smells and security vulnerabilities on 20+ programming languages including Java (including Android), C#, PHP, JavaScript, C/C++, COBOL, PL/SQL, PL/I, ABAP, VB.NET, VB6, Python, RPG, Flex, Objective-C, Swift, Web and XML.* (https://www.sonarqube.org/).
 
+![Ballerina -SonarQube Connector Overview](BallerinaEthereumJSONRPC.png)
+
+The following sections provide you with information on how to use the Ballerina SonarQube connector.
+
+- [Getting started](#getting-started)
+- [Running Samples](#running-samples)
+- [Quick Testing](#quick-testing)
+- [Working with sonarqube connector actions](#working-with-ethereum-connector-actions)
 
 ## Getting started
 
-1. Download the Ballerina tool distribution by navigating https://ballerinalang.org/downloads/
-2. Copy ballerina-sonarqube-{VERSION}.jar into the `<ballerina-tools>/bre/lib` folder.
+1. Create a ServerCredentials.conf file with following SonarQube server credentials.
+- serverURL - SonarQube server URL
+- authType - Authentication type (user or token)
+- username - Your SonarQube account username.If the authentication type is "user" this parameter must be specified.
+- password - Your SonarQube account password.If the authentication type is "user" this parameter must be specified.
+- token - If the authentication type is "token" this parameter must be specified.
 
 ##### Prerequisites
-1. Obtain the following parameters by visiting  [https://wso2.org/sonar/](https://wso2.org/sonar/):
-    * username
-    * password
-    * component name ex- analytics-apim
+1. Enable JSON RPC API in your Ethereum client node by visiting [https://github.com/ethereum/wiki/wiki/JSON-RPC/](https://github.com/ethereum/wiki/wiki/JSON-RPC#javascript-api).
+2. Identify the URI for the JSON RPC server.
+Default JSON-RPC endpoints:
 
-## Running sample
+| Client | URL |
+|-------|:------------:|
+| C++ |  http://localhost:8545 |
+| Go |http://localhost:8545 |
+| Py | http://localhost:4000 |
+| Parity | http://localhost:8545 |
 
-##### Invoke the actions
+## Running Samples
 
-- Copy `connector-sonarqube/component/samples/samples.bal` file and paste it into `<ballerina-tools>/bin` folder.
-- Run the following commands to get a list of line coverage measures for a component and a product.
+- Copy the `connector-ethereum/component/samples/ethereum/sampleDashBoard.bal` file and paste it into the `<ballerina-tools>/bin` folder.
+- Run the following command to execute the sample.
+    `bin$ ballerina run sampleDashBoard.bal <URI> <JSONRPCVersion> <NetworkID>`
 
-  1. **getLatestComponentLineCoverage:**
-  
-  `bin$ ./ballerina run samples.bal getLatestComponentLineCoverage <username> <password> <component_name>`
-  
-  2. **getLatestProductLineCoverage:**
+    E.g., `bin$ ballerina run sampleDashBoard.bal "http://localhost:8080" "2.0" 1999`
     
-    `bin$ ./ballerina run samples.bal getLatestProductLineCoverage <username> <password> <product_name> <database_host> <database_port> <database_name> <database_username> <database_password> <database_table>`
-    
-    ###### <product name>
-      * API Management
-      * Automation
-      * Ballerina
-      * Cloud
-      * Identity and Access Management
-      * Integration
-      * IoT
-      * Platform
-      * Platform Extension
-      * Streaming Analytics
-     ####
-    To execute this method you first need to create a sql database and insert [this](https://drive.google.com/file/d/11EdiPViLcBKvz3u-DbRi2Zo8l5D9QCK8/view?usp=sharing) table to the database.Then execute the ballerina run command with necessary credentials.
+## Quick Testing
 
-| Ballerina Version | SonarQube Connector Version |
-| ----------------- | ---------------------- |
-| 0.962.0 | 1.0-SNAPSHOT |
+You can easily test the following actions using the `sample.bal` file.
+
+- Copy `connector-ethereum/component/samples/ethereum/sample.bal` file and paste it into `<ballerina-tools>/bin` folder.
+- Run the following commands to execute the sample.
+    `bin$ ballerina run sample.bal <URI> <JSONRPCVersion> <NetworkID> <MethodName> <Param1> .. <ParamN>`
+
+## Working with sonarqube connector actions
+
+
+##### Related Ethereum Documentation
+
+https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_submithashrate
+
+***
+
+
+#### Related links
+- https://github.com/ethereum/wiki/wiki/JSON-RPC

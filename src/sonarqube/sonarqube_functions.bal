@@ -141,7 +141,7 @@ function getOperation (string name, string status, any additionalInformation) (O
     type issueType = typeof issue;
     if (typeof additionalInformation == commentType) {
         comment, _ = (Comment)additionalInformation;
-        operation.details = name + " " + comment.text + " on issue is " + status + ".";
+        operation.details = name + " \"" + comment.text + "\" on issue is " + status + ".";
         operation.createdDate = comment.createdDate;
     } else if (typeof additionalInformation == issueType) {
         issue, _ = (Issue)additionalInformation;

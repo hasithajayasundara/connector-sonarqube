@@ -31,10 +31,10 @@ public function constructAuthenticationHeaders (http:OutRequest request) {
         string password = config:getGlobalValue(PASSWORD);
         if (username == null || password == null) {
             if (username == null) {
-                log:printError("For" + USER + " " + AUTH_TYPE + "username should be provided");
+                log:printError("For "+AUTH_TYPE +" "+ USER +" username should be provided");
             }
             if (password != null) {
-                log:printError("For" + USER + " " + AUTH_TYPE + "password should be provided");
+                log:printError("For "+AUTH_TYPE +" "+ USER +" username should be provided");
             }
         } else {
             request.addHeader("Authorization", "Basic " + util:base64Encode(username + ":" + username));
