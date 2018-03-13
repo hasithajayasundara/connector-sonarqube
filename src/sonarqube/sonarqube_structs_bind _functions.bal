@@ -540,7 +540,7 @@ public function <Comment comment> delete () (Operation, error) {
 @Description {value:"Update a comment."}
 @Return {value:"operation: returns Operation struct containing operation details."}
 @Return {value:"err: returns error if an exception raised in updating comment."}
-public function <Comment comment> edit (string newText) (Operation , error) {
+public function <Comment comment> edit (string newText) (Operation) {
     endpoint<http:HttpClient> sonarqubeEP {
         getHTTPClient();
     }
@@ -555,14 +555,14 @@ public function <Comment comment> edit (string newText) (Operation , error) {
     response, httpError = sonarqubeEP.post(API_EDIT_COMMENT, request);
     if (httpError != null) {
         err = {message:httpError.message};
-        return null, err;
+        return null;
     }
     err = checkResponse(response);
     if (err != null) {
-        return null, err;
+        return null;
     }
     json responsePayload = getContentByKey(response, COMMENT);
     Comment commentStruct = <Comment, getComment()>responsePayload;
     Operation operation = getOperation(EDIT_COMMENT, SUCCESSFUL, commentStruct);
-    return operation, err;
+    return operation;
 }
