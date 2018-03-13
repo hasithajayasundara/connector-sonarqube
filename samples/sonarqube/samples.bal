@@ -196,10 +196,6 @@ function main (string[] a) {
             io:println(err.message);
         }
 
-        //Error
-        //Issue issue = projectIssues[0];
-        //Comment comment = issue.comments[0];
-
         var comment, err = projectIssues[0].addComment("This is a critical issue");
         if (err == null) {
             io:println("Adding comment - " + comment.details);
