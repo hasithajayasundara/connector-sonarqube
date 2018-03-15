@@ -21,7 +21,8 @@ package src.sonarqube;
 import ballerina.net.http;
 
 @Description {value:"Get complexity of a project."}
-@Return {value:"complexity:Returns complexity of a project.Complexity calculated based on the number of paths through the code."}
+@Return {value:"complexity:Returns complexity of a project.Complexity calculated based on the number of paths through
+ the code."}
 @Return {value:"err: Returns error if an exception raised in getting project complexity."}
 public function <Project project> getComplexity () (string, error) {
     var complexity, err = getMetricValue(project.key, COMPLEXITY);
@@ -67,8 +68,9 @@ public function <Project project> getDuplicatedLinesCount () (int, error) {
     return duplicatedLines, err;
 }
 
-@Description {value:"Number of blocker issues in a project.Blocker issue may be a bug with a high probability to impact the
-behavior of the application in production: memory leak, unclosed JDBC connection, .... The code MUST be immediately fixed."}
+@Description {value:"Number of blocker issues in a project.Blocker issue may be a bug with a high probability to impact
+the behavior of the application in production: memory leak, unclosed JDBC connection, .... The code MUST be immediately
+fixed."}
 @Return {value:"blockerIssue:returns number of blocker issues in a project."}
 @Return {value:"err: returns error if an exception raised in getting blocker issues count."}
 public function <Project project> getBlockerIssuesCount () (int, error) {
@@ -80,8 +82,9 @@ public function <Project project> getBlockerIssuesCount () (int, error) {
     return blockerIssues, err;
 }
 
-@Description {value:"Number of critical issues in a project.Either a bug with a low probability to impact the behavior of the application
-in production or an issue which represents a security flaw: empty catch block, SQL injection, ... The code MUST be immediately reviewed. "}
+@Description {value:"Number of critical issues in a project.Either a bug with a low probability to impact the behavior
+of the application in production or an issue which represents a security flaw: empty catch block, SQL injection, ...
+The code MUST be immediately reviewed. "}
 @Return {value:"criticalIssue:returns number of critical issues in a project."}
 @Return {value:"err: returns error if an exception raised in getting critical issues count."}
 public function <Project project> getCriticalIssuesCount () (int, error) {
@@ -93,8 +96,8 @@ public function <Project project> getCriticalIssuesCount () (int, error) {
     return criticalIssues, err;
 }
 
-@Description {value:"Number of major issues in a project.Quality flaw which can highly impact the developer productivity: uncovered piece
-of code, duplicated blocks, unused parameters, ..."}
+@Description {value:"Number of major issues in a project.Quality flaw which can highly impact the developer
+ productivity: uncovered piece of code, duplicated blocks, unused parameters, ..."}
 @Return {value:"minorIssue:returns number of minor issues in a project."}
 @Return {value:"err: returns error if an exception raised in getting major issues count."}
 public function <Project project> getMajorIssuesCount () (int, error) {
@@ -106,8 +109,8 @@ public function <Project project> getMajorIssuesCount () (int, error) {
     return majorIssues, err;
 }
 
-@Description {value:"Number of minor issues in a project.Quality flaw which can slightly impact the developer productivity: lines should not
- be too long, switch statements should have at least 3 cases, ..."}
+@Description {value:"Number of minor issues in a project.Quality flaw which can slightly impact the developer
+productivity: lines should not be too long, switch statements should have at least 3 cases, ..."}
 @Return {value:"majorIssue:returns number of major issues in a project."}
 @Return {value:"err: returns error if an exception raised in getting minor issues count."}
 public function <Project project> getMinorIssuesCount () (int, error) {
@@ -189,8 +192,8 @@ public function <Project project> getBranchCoverage () (string, error) {
     return branchCoverage + "%", err;
 }
 
-@Description {value:"Get number of code smells in a project.Code smell, (or bad smell) is any symptom in the source code of a program that
-possibly indicates a deeper problem."}
+@Description {value:"Get number of code smells in a project.Code smell, (or bad smell) is any symptom in the source code
+ of a program that possibly indicates a deeper problem."}
 @Return {value:"codeSmells: returns number of code smells in a project."}
 @Return {value:"err: returns error if an exception raised in getting code smells count."}
 public function <Project project> getCodeSmellsCount () (int, error) {
@@ -202,8 +205,8 @@ public function <Project project> getCodeSmellsCount () (int, error) {
     return codeSmells, err;
 }
 
-@Description {value:"Get SQALE rating of a project.This is the rating given to your project related to the value of your Technical Debt
-Ratio."}
+@Description {value:"Get SQALE rating of a project.This is the rating given to your project related to the value of your
+ Technical Debt Ratio."}
 @Return {value:"sqaleRating:returns sqale rating of a project."}
 @Return {value:"err: returns error if an exception raised in getting SQALE rating."}
 public function <Project project> getSQALERating () (string, error) {

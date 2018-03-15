@@ -18,6 +18,7 @@
 
 package src.sonarqube;
 
+@Description {value:"Struct to get the details of a project."}
 public struct Project {
     string name;
     string key;
@@ -28,6 +29,7 @@ public struct Project {
     string description;
 }
 
+@Description {value:"Struct to get the details of an issue in a project."}
 public struct Issue {
     string key;
     string severity;
@@ -43,11 +45,13 @@ public struct Issue {
     string[] workflowTransitions;
 }
 
+@Description {value:"Struct to get the start line and the end line of an issue."}
 struct Position {
     string startLine;
     string endLine;
 }
 
+@Description {value:"Struct to get the details of a comment on an issue."}
 public struct Comment {
     string text;
     string key;
