@@ -4,7 +4,7 @@
 
 ### Why would you use a Ballerina connector for SonarQube
 
-Using Ballerina SonarQube connector you can easily get the important code quality measurements ,project issues,add comment on those and do several operations on the issues as well as their comments.Following diagram gives an overview of Ballerina SonarQube connector.
+Using Ballerina SonarQube connector you can easily get important code quality measurements of a project.Following diagram gives an overview of Ballerina SonarQube connector.
 
 ![Ballerina -SonarQube Connector Overview](sonarqube-connector.png)
 
@@ -41,7 +41,7 @@ You can easily test the following actions using the `sample.bal` file.
 
 ### Example
 
-First you need to create a Project struct and initialize it with your project details.If you wish to get the project details using a project name you form the server you can use getProject method.
+First you need to create a Project struct and initialize the struct with your project details.If you wish to get the project details from the server using a name ,you can use getProject method.
 
 ```ballerina
 endpoint<sonarqube:SonarqubeConnector> sonarqubueConnector {
@@ -62,7 +62,7 @@ endpoint<sonarqube:SonarqubeConnector> sonarqubueConnector {
     }
 ```
 
-Using the Project struct you have created, you can invoke the other methods as follows.
+Using the this Project struct, you can invoke other functions as follows.
 
 ```ballerina
     var complexity, err = project.getComplexity();
@@ -72,13 +72,12 @@ Using the Project struct you have created, you can invoke the other methods as f
         io:println(err.message);
     }
 ```
-Also you can perform operations on project issues.You can get a set of issues and their details using,
+Also you can perform operations on project issues (ex - (https://wso2.org/sonar/project/issues?id=org.wso2.siddhi%3Asiddhi).You can get a set of issues and their details using,
 ```ballerina
     Issues[] projectIssues;
     error err;
     projectIssues, err = project.getIssues();
     if (err == null) {
-        io:print("Issues - ");
         io:println(projectIssues);
     } else {
         io:println(err.message);
@@ -151,7 +150,8 @@ Siddhi, high performing Complex Event Processing Engine
 
 #### getComplexity
 
-Get the complexity of a project.
+Get complexity of a project.This calculated based on the number of paths through the code. Whenever the control flow of a function splits, the complexity counter gets incremented by one. Each function has a minimum complexity of 1. This calculation varies slightly by language because keywords and functionalities do.
+                            
 
 ##### Returns
 
