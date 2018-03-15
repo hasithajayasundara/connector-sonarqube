@@ -20,7 +20,6 @@ package samples.sonarqube;
 
 import ballerina.io;
 import src.sonarqube;
-//src as source root
 
 function main (string[] serverArgs) {
     endpoint<sonarqube:SonarqubeConnector> sonarqubueConnector {

@@ -4,7 +4,7 @@
 
 ### Why would you use a Ballerina connector for SonarQube
 
-Using Ballerina SonarQube connector you can get the most important code quality measurements of a project easily as described below.Further you can get the details of project issues,add comment on those and do several operations on the issues as well as their comments , comfortably.Following you get an overview of Ballerina SonarQube connector.
+Using Ballerina SonarQube connector you can easily get the important code quality measurements ,project issues,add comment on those and do several operations on the issues as well as their comments.Following diagram gives an overview of Ballerina SonarQube connector.
 
 ![Ballerina -SonarQube Connector Overview](sonarqube-connector.png)
 
@@ -34,7 +34,7 @@ The following sections provide you with information on how to use the Ballerina 
 ## Quick Testing
 
 You can easily test the following actions using the `sample.bal` file.
-- Run `ballerina run /samples/sonarqube Bballerina.conf=path/to/conf/file/server-config-file-name.conf` from you sonarqube connector directory.
+- Run `ballerina run /samples/sonarqube Bballerina.conf=path/to/conf/file/server-config-file-name.conf` "Project_Name" from you sonarqube connector directory.
 
 
 ## Working with SonarQube connector actions

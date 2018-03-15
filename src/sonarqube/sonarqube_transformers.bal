@@ -46,8 +46,10 @@ transformer <json issueDetails, Issue issue> getIssue() {
     issue.assignee = (issueDetails[ASSIGNEE] != null) ? issueDetails[ASSIGNEE].toString() : null;
     json positionInfo = issueDetails[ISSUE_RANGE];
     issue.position = {};
-    issue.position.startLine = (positionInfo != null) ? ((positionInfo[START_LINE] != null) ? positionInfo[START_LINE].toString() : null) : null;
-    issue.position.endLine = (positionInfo != null) ? ((positionInfo[END_LINE] != null) ? positionInfo[END_LINE].toString() : null) : null;
+    issue.position.startLine = (positionInfo != null) ? ((positionInfo[START_LINE] != null) ?
+                                                         positionInfo[START_LINE].toString() : null) : null;
+    issue.position.endLine = (positionInfo != null) ? ((positionInfo[END_LINE] != null) ? positionInfo[END_LINE]
+                                                                                          .toString() : null) : null;
     json tags = issueDetails[TAGS];
     issue.tags = (tags != null) ? tags.map(function (json tag) (string) {
                                                return tag.toString();
