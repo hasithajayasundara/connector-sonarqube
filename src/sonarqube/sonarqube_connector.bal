@@ -18,8 +18,9 @@
 
 package src.sonarqube;
 
-import ballerina.config;
 import ballerina.net.http;
+import ballerina.log;
+import ballerina.config;
 
 @Description {value:"SonarQube client connector."}
 public connector SonarqubeConnector () {
@@ -35,40 +36,28 @@ public connector SonarqubeConnector () {
     action getProject (string projectName) (Project, error) {
         http:OutRequest request = {};
         http:InResponse response = {};
-        http:HttpConnectorError httpError;
+        http:HttpConnectorError connectionError;
+        constructAuthenticationHeaders(request);
+        response, connectionError = sonarqubeEP.get(API_RESOURCES, request);
         error err = null;
-        constructAuthenticationHeaders(request);
-        response, httpError = sonarqubeEP.get(API_RESOURCES, request);
-        if (httpError != null) {
-            err = {message:httpError.message};
+        try {
+            if (connectionError != null) {
+                err = {message:connectionError.message};
+                throw err;
+            }
+            checkResponse(response);
+            json allProducts = getContent(response);
+            foreach product in allProducts {
+                Project project = <Project, getProjectDetails()>product;
+                if (project.name == projectName) {
+                    return project, err;
+                }
+            }
+        } catch (error getProjectError) {
             return null, err;
         }
-        var projectKey, keyError = getProjectKey(response, projectName);
-        if (keyError != null) {
-            err = keyError;
-            return null, err;
-        }
-        string requestPath = API_SHOW_PROJECT + "?" + KEY + "=" + projectKey;
-        response = {};
-        request = {};
-        constructAuthenticationHeaders(request);
-        response, httpError = sonarqubeEP.get(requestPath, request);
-        if (httpError != null) {
-            err = {message:httpError.message};
-            return null, err;
-        }
-        error httpResponseError = checkResponse(response);
-        if (httpResponseError != null) {
-            err = httpResponseError;
-            return null, err;
-        }
-        json component = getContentByKey(response, COMPONENT);
-        if (component == null) {
-            err = {message:"Project specified by " + projectName + " cannot be found in sonarqube server."};
-            return null, err;
-        }
-        Project project = <Project, getProjectDetails()>component;
-        return project, err;
+        err = {message:"Project specified by name " + projectName + " cannot be found in sonarqube server."};
+        return null, err;
     }
 }
 

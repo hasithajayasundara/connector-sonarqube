@@ -24,6 +24,7 @@ public struct Project {
     string id;
     string uuid;
     string |version|;
+    string creationDate;
     string description;
 }
 
@@ -31,7 +32,7 @@ public struct Issue {
     string key;
     string severity;
     string status;
-    string message;
+    string description;
     string author;
     string creationDate;
     string assignee;
@@ -53,11 +54,3 @@ public struct Comment {
     string commenter;
     string createdDate;
 }
-
-public struct Operation {
-    string name;
-    string status;
-    string details;
-    string createdDate;
-}
-

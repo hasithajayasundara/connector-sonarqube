@@ -19,35 +19,55 @@
 package src.sonarqube;
 
 import ballerina.net.http;
-import ballerina.time;
 
 @Description {value:"Check whether the response from sonarqube server has an error field."}
 @Param {value:"response: http InResponse."}
-@Return {value:"errorMessage: If the response payload consists of an error field return it."}
-function checkResponse (http:InResponse response) (error) {
+function checkResponse (http:InResponse response) {
     json responseJson = getContentByKey(response, ERRORS);
-    error err;
     if (responseJson != null) {
-        err = {};
-        err.message = "";
+        error err = {message:""};
         foreach item in responseJson {
             err.message = err.message + ((item.msg != null) ? item.msg.toString() : "") + ".";
         }
+        throw err;
     }
-    return err;
+}
+
+@Description {value:"Get content from a json."}
+@Param {value:"response: http InResponse."}
+@Return {value:"jsonPayload: response Json payload."}
+function getContent (http:InResponse response) (json) {
+    var jsonPayload, err = response.getJsonPayload();
+    if (err != null) {
+        throw err;
+    }
+    if (jsonPayload == null) {
+        if (response.reasonPhrase != null) {
+            err = {message:response.reasonPhrase};
+            throw err;
+        }
+        err = {message:"Server response payload is null."};
+        throw err;
+    }
+    return jsonPayload;
 }
 
 @Description {value:"Get content from a json specified by key."}
 @Param {value:"response: http InResponse."}
 @Param {value:"key: String key."}
-@Return {value:"jsonPayload: Content of type json specified by key."}
+@Return {value:"jsonPayload: Content (of type json) specified by the key."}
 function getContentByKey (http:InResponse response, string key) (json) {
     var jsonPayload, err = response.getJsonPayload();
     if (err != null) {
-        return {};
+        throw err;
     }
-    if (key == "") {
-        return jsonPayload;
+    if (jsonPayload == null) {
+        if (response.reasonPhrase != null) {
+            err = {message:response.reasonPhrase};
+            throw err;
+        }
+        err = {message:"Server response payload is null."};
+        throw err;
     }
     return jsonPayload[key];
 }
@@ -62,100 +82,57 @@ function getMetricValue (string projectKey, string metricName) (string, error) {
     }
     http:OutRequest request = {};
     http:InResponse response = {};
-    http:HttpConnectorError httpError;
-    error err = null;
+    http:HttpConnectorError connectionError;
     constructAuthenticationHeaders(request);
     string requestPath = API_MEASURES + "?" + COMPONENT_KEY + "=" + projectKey + "&" + METRIC_KEY + "=" + metricName;
-    response, httpError = sonarqubeEP.get(requestPath, request);
-    if (httpError != null) {
-        err = {message:httpError.message};
-        return null, err;
-    }
-    error httpResponseError = checkResponse(response);
-    if (httpResponseError != null) {
-        err = httpResponseError;
-        return null, err;
-    }
-    json component = getContentByKey(response, COMPONENT);
-    if (component == null) {
-        err = {message:"Metric definitions for this project cannot be found"};
-        return null, err;
-    }
-    json metricValue = component[MEASURES][0][VALUE];
-    string value = (metricValue != null) ? metricValue.toString() : null;
-    if (value == null) {
-        err = {message:"Cannot find " + metricName.replace("_", " ") + " for this project"};
-        return null, err;
+    response, connectionError = sonarqubeEP.get(requestPath, request);
+    string value;
+    error err;
+    try {
+        if (connectionError != null) {
+            err = {message:connectionError.message};
+            throw err;
+        }
+        checkResponse(response);
+        json component = getContentByKey(response, COMPONENT);
+        json metricValue = component[MEASURES][0][VALUE];
+        value = (metricValue != null) ? metricValue.toString() : null;
+        if (value == null) {
+            err = {message:"Cannot find " + metricName.replace("_", " ") + " for this project."};
+            throw err;
+        }
+    } catch (error getValueError) {
+        return null, getValueError;
     }
     return value, err;
 }
 
-@Description {value:"Returns key of a project."}
-@Param {value:"response: http InResponse."}
-@Param {value:"projectName : project name."}
-@Return {value:"projectKey: key of a project."}
-@Return {value:"err: if error occured in getting key of a project."}
-function getProjectKey (http:InResponse response, string projectName) (string, error) {
-    error err;
-    error httpResponseError = checkResponse(response);
-    if (httpResponseError != null) {
-        return null, httpResponseError;
+@Description {value:"Perform operations in Issues and get the output."}
+@Param {value:"name:Operation name."}
+@Param {value:"requestPath:Request path of the operation."}
+@Param {value:"payload:Outgoing Payload."}
+@Return {value:"err: Returns if an error raised in doing operation."}
+function doOpertion (string name, string requestPath, json payload) (error) {
+    endpoint<http:HttpClient> sonarqubeEP {
+        getHTTPClient();
     }
-    string projectKey;
-    json allProducts = getContentByKey(response, "");
-    if (allProducts == null) {
-        err = {message:"Cannot get the product list form sonarqube server"};
-        return null, err;
-    }
-    int lengthOfProducts = lengthof allProducts;
-    if (lengthOfProducts == 0) {
-        err = {message:"Projects cannot be found in sonarqube server"};
-        return null, err;
-    }
-    foreach product in allProducts {
-        Project project = <Project, getProjectDetails()>product;
-        if (project.name == projectName) {
-            projectKey = project.key;
-            if (projectKey == null) {
-                err = {message:"Project specified by name " + projectName + "cannot be found in sonarqube server"};
-                return null, err;
-            }
-            return projectKey, err;
+    http:OutRequest request = {};
+    http:InResponse response = {};
+    http:HttpConnectorError httpError;
+    constructAuthenticationHeaders(request);
+    request.setHeader(CONTENT_TYPE, APPLICATION_JSON);
+    request.setJsonPayload(payload);
+    response, httpError = sonarqubeEP.post(requestPath, request);
+    error err = null;
+    try {
+        if (httpError != null) {
+            err = {message:name + " is unsuccessful " + httpError.message};
+            throw err;
         }
+        checkResponse(response);
+    } catch (error doOperationError) {
+        doOperationError.message = name + " is unsuccessful." + doOperationError.message;
+        return doOperationError;
     }
-    err = {message:"Project specified by name " + projectName + "cannot be found in sonarqube server"};
-    return null, err;
-}
-
-@Description {value:"Get operation details."}
-@Param {value:"name:Name of the operation."}
-@Param {value:"status:Operation status"}
-@Return {value:"operation: Returns struct Operation containing operation details."}
-function getOperation (string name, string status, any additionalInformation) (Operation) {
-    Operation operation = {};
-    operation.name = name;
-    operation.status = status;
-    Comment comment = {};
-    Issue issue = {};
-    type commentType = typeof comment;
-    type issueType = typeof issue;
-    if (typeof additionalInformation == commentType) {
-        comment, _ = (Comment)additionalInformation;
-        operation.details = name + " \"" + comment.text + "\" on issue is " + status + ".";
-        operation.createdDate = comment.createdDate;
-    } else if (typeof additionalInformation == issueType) {
-        issue, _ = (Issue)additionalInformation;
-        if (name == ASSIGN) {
-            operation.details = name + " " + issue.assignee + " on issue is " + status + ".";
-        } else if (name == SET_TYPE) {
-            operation.details = name + " " + issue.|type| + " on issue is " + status + ".";
-        } else if (name == SET_SEVERITY) {
-            operation.details = name + " " + issue.severity + " on issue is " + status + ".";
-        } else if (name == SET_STATUS) {
-            operation.details = name + " " + issue.status + " on issue is " + status + ".";
-        }
-        time:Time time = time:currentTime();
-        operation.createdDate = time.toString();
-    }
-    return operation;
+    return err;
 }

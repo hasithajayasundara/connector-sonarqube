@@ -25,6 +25,7 @@ transformer <json projectDetails, Project project> getProjectDetails() {
     project.uuid = (projectDetails[UUID] != null) ? projectDetails[UUID].toString() : null;
     project.|version| = (projectDetails[VERSION] != null) ? projectDetails[VERSION].toString() : null;
     project.description = (projectDetails[DESCRIPTION] != null) ? projectDetails[DESCRIPTION].toString() : null;
+    project.creationDate = (projectDetails[CREATION_DATE] != null) ? projectDetails[CREATION_DATE].toString() : null;
 }
 
 transformer <json commentDetails, Comment comment> getComment() {
@@ -39,7 +40,7 @@ transformer <json issueDetails, Issue issue> getIssue() {
     issue.severity = (issueDetails[SEVERITY] != null) ? issueDetails[SEVERITY].toString() : null;
     issue.status = (issueDetails[STATUS] != null) ? issueDetails[STATUS].toString() : null;
     issue.|type| = (issueDetails[TYPE] != null) ? issueDetails[TYPE].toString() : null;
-    issue.message = (issueDetails[MESSAGE] != null) ? issueDetails[MESSAGE].toString() : null;
+    issue.description = (issueDetails[MESSAGE] != null) ? issueDetails[MESSAGE].toString() : null;
     issue.author = (issueDetails[AUTHOR] != null) ? issueDetails[AUTHOR].toString() : null;
     issue.creationDate = (issueDetails[CREATION_DATE] != null) ? issueDetails[CREATION_DATE].toString() : null;
     issue.assignee = (issueDetails[ASSIGNEE] != null) ? issueDetails[ASSIGNEE].toString() : null;
