@@ -34,7 +34,7 @@ The following sections provide you with information on how to use the Ballerina 
 ## Quick Testing
 
 You can easily test the following actions using the `sample.bal` file.
-- Run `ballerina run /samples/sonarqube Bballerina.conf=path/to/conf/file/server-config-file-name.conf` "Project_Name" from you sonarqube connector directory.
+- Run `ballerina run /samples/sonarqube Bballerina.conf=path/to/conf/file/server-config-file-name.conf "Project_Name"` from you sonarqube connector directory.
 
 
 ## Working with SonarQube connector actions
